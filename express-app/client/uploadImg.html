@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <head>
+        <title>upload img</title>
+    </head>
+    <body>
+        <div>
+            <h1></h1>
+        </div>
+        <input type="file" name="" id="input_img" />
+        <br> </br>
+        <img id="show_img" src="../img/nulImg.png">
+        <img id="result" src="../img/nulImg.png">
+        <br> </br>
+        <label for="path">image path: </label>
+
+        <input type="value" name="" id="pathOfImg" style="width:460px;" value = "C:\Users\duo\Desktop\reactJS\AWS\server\express-app\img\2.jpg">
+        <input type="value" name="" id="outputName" style="width:60px;">
+        <select id="styleSelect">
+            <option value="">Please input style</option>
+            <option value="vangogh">Vangogh</option>
+            <option value="kiwi">Kiwi</option>
+            <option value="abstract">Abstract</option>
+        </select>
+        <button id="submit" onclick="savePath()">load img</button>
+
+        <br> </br>
+        <button id="ax">axios send</button>
+        <script>
+            // path = C:\Users\duo\Desktop\reactJS\AWS\server\express-app\vg\datasets\test\A\1.jpg
+            // C:\Users\duo\Desktop\reactJS\AWS\server\express-app\img\2.jpg
+            var imgPath = document.getElementById("submit");
+            var ax = document.getElementById("ax");
+            // var pathOfImg = document.getElementById("pathOfImg").value;
+            let pthimg = {}
+            let outName = ''
+            let style = ''
+            var image = document.getElementById("show_img");
+            var resultImg = document.getElementById("result");
+            pathOfImg.onchange = (e) =>{
+                console.log("pathOfImg")
+            }
+
+            getStyle = () => {
+                selectElement = document.querySelector('#styleSelect');
+                style = selectElement.value;
+            }
+
+            exeFun = () => {
+                getUrl = 'http://localhost:4000/upload'+'?pathImg='+pthimg+'&name='
+                getUrl = getUrl + outName + '&style=' + style
+                console.log("axios clicked: " + getUrl);
+                let res = axios.get(
+                    getUrl
+                )
+                .then((response) => {
+                    console.log('the response is: ' + response);
+                    resultImg.src = '../output/' + outName + style + '.jpg'
+                    console.log("output img path = " + resultImg.src)
+                }, (error) => {
+                    console.log(error);
+                });
+            }
+
+            ax.onclick = () => {
+                exeFun();
+            }
+            
+
+            function savePath(){
+                var pathOfImg = document.getElementById("pathOfImg").value;
+                var outputName = document.getElementById("outputName").value;
+                pthimg = pathOfImg
+                outName = outputName
+                console.log("pthimg: " + pthimg)
+                image.src = pathOfImg
+                image.alt = pathOfImg
+                getStyle();
+                exeFun();
+            }   
+
+            var getUserPhoto = document.getElementById("input_img");
+            getUserPhoto.onchange = function () 
+            {
+                var file = this.files;
+                console.log(file);
+                var reader = new FileReader();
+                reader.readAsDataURL(file[0]);
+                // console.log(reader.result);
+                reader.onload = function () 
+                {
+                    image.src = reader.result;
+                    console.log(image.src);
+                };
+             };
+
+            var changePage = document.getElementById("ch");
+            changePage.onclick = function(){
+                location.href = '1.html'
+            }
+        </script>
+    </body>
+</html>

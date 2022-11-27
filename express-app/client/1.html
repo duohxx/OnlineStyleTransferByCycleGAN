@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ajax get request</title>
+        <style>
+            #result{
+                width: 200px;
+                height: 100px;
+                border: solid 1px #90b;
+            }
+        </style>
+    </head>
+    <body>
+        <p>This is an example of a simple HTML page with one paragraph.</p>
+        <button> click me to send a request</button>
+        <div id="result"></div>
+        <button id="imgLoad">goTOImgLoad</button>
+
+        <script>
+            // get button element
+            const result = document.getElementById("result");
+            const btn = document.getElementsByTagName('button')[0];
+            // bind instance
+            btn.onclick = function(){
+                // creat object
+                const xhr = new XMLHttpRequest();
+                // init
+                xhr.open('GET', 'http://localhost:4000/user');
+                // send
+                xhr.send();
+
+                xhr.onreadystatechange = function() {
+                    if(xhr.readyState === 4){
+                        if( xhr.status >= 200 && xhr.status <= 300 ){
+                            console.log(xhr.status); // 状态码
+                            console.log(xhr.statusText); //zhuangtaizifuchuan
+                            console.log(xhr.getAllResponseHeaders());
+                            console.log(xhr.response); //响应体
+                            result.innerHTML = xhr.response;
+                        } else {
+                            console.log(xhr.status); // 状态码
+                        }
+                    }
+                }
+            }
+            var imgload = document.getElementById("imgLoad");
+            imgload.onclick = () => {
+                location.href = 'uploadImg.html'
+            }
+        </script>
+    </body>
+</html>
